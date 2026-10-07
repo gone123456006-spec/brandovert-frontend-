@@ -164,13 +164,30 @@ export const leadership = [
   },
 ];
 
-export const clientLogos = [
-  "FreshKart",
-  "Learnly",
-  "Aurum Interiors",
-  "MediLink",
-  "UrbanNest",
-  "PayRoute",
-  "GreenLeaf",
-  "Nimbus Labs",
+/**
+ * - `icon`: square app icon, shown with the name beside it.
+ * - `wordmark`: the logo already contains the name.
+ * - `text`: no logo file; drawn in code by `ClientLogo`.
+ */
+export type ClientLogo = { name: string; href?: string } & (
+  | { kind: "icon"; logo: string }
+  | { kind: "wordmark"; logo: string; width: number; height: number }
+  | { kind: "text"; logo?: string }
+);
+
+export const clientLogos: ClientLogo[] = [
+  { kind: "icon", name: "Luvstor", logo: "/work/luvstor/icon.webp", href: "/work/luvstor-app" },
+  { kind: "icon", name: "Finovert", logo: "/work/finovert-app/icon.webp", href: "/work/finovert-website" },
+  { kind: "wordmark", name: "Pernod Ricard", logo: "/clients/pernod-ricard.png", width: 328, height: 120 },
+  { kind: "icon", name: "Ohm's English", logo: "/work/ohms/icon.webp", href: "/work/ohms-english-app" },
+  { kind: "wordmark", name: "BizVyapar", logo: "/work/bizvyapar/logo.png", width: 701, height: 120, href: "/work/bizvyapar-website" },
+  { kind: "wordmark", name: "Pranav One", logo: "/clients/pranav-one.png", width: 279, height: 120 },
+  { kind: "text", name: "Dhanvia", href: "/work/dhanvia-website" },
+  { kind: "icon", name: "Impression Imaging", logo: "/clients/impression-imaging.png", href: "/work/impression-imaging-website" },
+  { kind: "text", name: "Hovertech" },
+  { kind: "icon", name: "FinTaxCoach", logo: "/clients/fintaxcoach.png", href: "/work/fintaxcoach-website" },
+  { kind: "wordmark", name: "FinAspiration", logo: "/clients/finaspiration.png", width: 402, height: 96, href: "/work/finaspiration-website" },
+  { kind: "text", name: "LedgerBook" },
+  { kind: "icon", name: "MyBalag", logo: "/clients/mybalag.png", href: "/work/mybalag-website" },
+  { kind: "text", name: "Sunar Bahi Khata" },
 ];

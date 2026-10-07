@@ -4,6 +4,7 @@ import { formattedAddress, site, whatsappHref } from "@/lib/site";
 import { services } from "@/lib/content/services";
 import { Logo } from "./logo";
 import { InstagramIcon, LinkedInIcon, WhatsAppIcon } from "./brand-icons";
+import { QuoteButton } from "./service-enquiry";
 
 const companyLinks = [
   { href: "/about", label: "About Us" },
@@ -80,7 +81,14 @@ export function SiteFooter() {
             ))}
           </FooterColumn>
           <FooterColumn title="Get Started">
-            <FooterLink href="/contact">Get a free quote</FooterLink>
+            <li>
+              <QuoteButton
+                plain
+                className="cursor-pointer text-left hover:text-white hover:underline hover:decoration-highlight hover:underline-offset-4"
+              >
+                Get a free quote
+              </QuoteButton>
+            </li>
             <li>
               <a href={whatsappHref()} target="_blank" rel="noopener noreferrer" className="hover:underline">
                 Chat on WhatsApp
@@ -130,12 +138,12 @@ export function SiteFooter() {
           {site.contact.phoneDisplay}
         </a>{" "}
         or simply{" "}
-        <Link
-          href="/contact"
-          className="font-bold text-highlight underline underline-offset-2 hover:text-white"
+        <QuoteButton
+          plain
+          className="cursor-pointer font-bold text-highlight underline underline-offset-2 hover:text-white"
         >
           Request a Callback
-        </Link>
+        </QuoteButton>
         , and we&apos;ll get in touch with you shortly.
       </p>
     </footer>

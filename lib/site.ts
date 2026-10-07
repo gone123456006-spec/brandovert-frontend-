@@ -6,11 +6,11 @@ export const site = {
     "Brandovert is a technology partner for growing businesses. We design, build, market and maintain web apps, mobile apps, SaaS products and custom software.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   contact: {
-    phoneDisplay: "+91 98765 43210",
-    phoneHref: "tel:+919876543210",
-    whatsappNumber: "919876543210",
+    phoneDisplay: "+91 98750 73267",
+    phoneHref: "tel:+919875073267",
+    whatsappNumber: "919875073267",
     whatsappMessage: "Hi Brandovert, I'd like to discuss a project.",
-    email: "brandovert.tech@gmail.com",
+    email: "brandoverts@gmail.com",
     hours: "Mon to Sat, 10:00 AM to 7:00 PM IST",
     address: {
       line1: "3rd Floor, 20, 100 Feet Road",
@@ -43,4 +43,5 @@ export const mainNav = [
   { href: "/work", label: "Case Studies" },
   { href: "/about", label: "About Us" },
   { href: "/faq", label: "FAQ" },
+  { href: "/contact", label: "Contact Us" },
 ] as const;

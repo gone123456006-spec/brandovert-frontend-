@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
+import { Anton, Plus_Jakarta_Sans, Geist_Mono, Poppins } from "next/font/google";
 import { site } from "@/lib/site";
+import { AnnouncementBar } from "@/components/site/announcement-bar";
+import { AudioUnlock } from "@/components/site/count-up";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { WhatsAppFloat } from "@/components/site/whatsapp-float";
 import { WelcomePopup } from "@/components/site/welcome-popup";
+import { ServiceEnquiryProvider } from "@/components/site/service-enquiry";
 import "./globals.css";
 
 const sans = Plus_Jakarta_Sans({
@@ -12,8 +15,21 @@ const sans = Plus_Jakarta_Sans({
   subsets: ["latin"],
 });
 
+const anton = Anton({
+  variable: "--font-anton",
+  weight: "400",
+  subsets: ["latin"],
+});
+
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+// Only for client text logos that are set in Poppins.
+const poppins = Poppins({
+  variable: "--font-poppins",
+  weight: ["600", "700"],
   subsets: ["latin"],
 });
 
@@ -34,7 +50,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${sans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${sans.variable} ${anton.variable} ${geistMono.variable} ${poppins.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <a
           href="#main"
@@ -42,13 +58,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <SiteHeader />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <SiteFooter />
-        <WhatsAppFloat />
-        <WelcomePopup />
+        <ServiceEnquiryProvider>
+          <AnnouncementBar />
+          <SiteHeader />
+          <main id="main" className="flex-1">
+            {children}
+          </main>
+          <SiteFooter />
+          <WhatsAppFloat />
+          <WelcomePopup />
+          <AudioUnlock />
+        </ServiceEnquiryProvider>
       </body>
     </html>
   );

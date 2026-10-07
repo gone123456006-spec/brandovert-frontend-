@@ -50,20 +50,34 @@ export function Carousel({ label, children }: { label: string; children: React.R
     return () => clearInterval(timer);
   }, [step]);
 
-  const pause = () => (pausedRef.current = true);
+  const resumeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(resumeTimer.current), []);
+
+  const pause = () => {
+    clearTimeout(resumeTimer.current);
+    pausedRef.current = true;
+  };
   const resume = () => (pausedRef.current = false);
+  // Touch has no "leave" event, so pick auto-sliding back up shortly after the finger lifts.
+  const resumeSoon = () => {
+    clearTimeout(resumeTimer.current);
+    resumeTimer.current = setTimeout(resume, AUTO_SLIDE_MS);
+  };
 
   return (
     <div
-      className="flex items-center gap-2 sm:gap-4"
+      className="relative flex items-center gap-2 sm:gap-4"
       onMouseEnter={pause}
       onMouseLeave={resume}
-      onFocus={pause}
+      // Only keyboard focus pauses; a clicked arrow keeps focus and would otherwise stop the slider.
+      onFocus={(e) => e.target.matches(":focus-visible") && pause()}
       onBlur={resume}
       onTouchStart={pause}
+      onTouchEnd={resumeSoon}
+      onTouchCancel={resumeSoon}
     >
-      <CarouselButton label="Previous" disabled={!canPrev} onClick={() => step(-1)}>
-        <ChevronLeft className="size-9" strokeWidth={2.5} />
+      <CarouselButton label="Previous" disabled={!canPrev} onClick={() => step(-1)} className="left-1">
+        <ChevronLeft className="size-5 sm:size-7" strokeWidth={2.5} />
       </CarouselButton>
       <ul
         ref={trackRef}
@@ -73,19 +87,19 @@ export function Carousel({ label, children }: { label: string; children: React.R
       >
         {children}
       </ul>
-      <CarouselButton label="Next" disabled={!canNext} onClick={() => step(1)}>
-        <ChevronRight className="size-9" strokeWidth={2.5} />
+      <CarouselButton label="Next" disabled={!canNext} onClick={() => step(1)} className="right-1">
+        <ChevronRight className="size-5 sm:size-7" strokeWidth={2.5} />
       </CarouselButton>
     </div>
   );
 }
 
-/** One slide: 1 per view on phones, 2 on tablets, 3 on desktop (widths account for the 1.25rem gap). */
+/** One slide: a centred card with the next one peeking on phones, 2 on tablets, 3 on desktop (widths account for the 1.25rem gap). */
 export function CarouselItem({ className, children }: { className?: string; children: React.ReactNode }) {
   return (
     <li
       className={cn(
-        "w-full shrink-0 snap-start sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)]",
+        "w-[82%] shrink-0 snap-center sm:w-[calc((100%-1.25rem)/2)] sm:snap-start lg:w-[calc((100%-2.5rem)/3)]",
         className
       )}
     >
@@ -98,11 +112,13 @@ function CarouselButton({
   label,
   disabled,
   onClick,
+  className,
   children,
 }: {
   label: string;
   disabled: boolean;
   onClick: () => void;
+  className?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -111,7 +127,12 @@ function CarouselButton({
       aria-label={label}
       disabled={disabled}
       onClick={onClick}
-      className="hidden size-11 shrink-0 place-items-center rounded-full text-ink transition-colors outline-none hover:text-brand focus-visible:ring-3 focus-visible:ring-brand/40 disabled:pointer-events-none disabled:opacity-20 sm:grid"
+      className={cn(
+        // Phones: floats over the card edge so the slide keeps its full width.
+        "absolute top-1/2 z-10 grid size-8 shrink-0 -translate-y-1/2 place-items-center rounded-full bg-white text-ink shadow-[0_4px_14px_-4px_rgb(0_0_0/0.35)] transition outline-none hover:text-brand focus-visible:ring-3 focus-visible:ring-brand/40 disabled:pointer-events-none disabled:opacity-0",
+        "sm:static sm:size-9 sm:translate-y-0 sm:bg-transparent sm:shadow-none sm:disabled:opacity-20",
+        className
+      )}
     >
       {children}
     </button>

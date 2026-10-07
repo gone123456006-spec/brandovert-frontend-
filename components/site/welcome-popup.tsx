@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ChevronRight, X } from "lucide-react";
-import { CtaLink } from "./cta";
+import { QuoteButton } from "./service-enquiry";
 
 const DELAY_MS = 6000;
 const SEEN_KEY = "bv-popup-seen";
@@ -83,10 +83,10 @@ export function WelcomePopup() {
               ? "It's great to see you back! Tell us what you're building and get a written scope and a fixed quote within 5 working days."
               : "Book a free consultation with our team. You'll get a written scope and a fixed quote within 5 working days, with no obligation."}
           </p>
-          <CtaLink href="/contact" onClick={close} variant="dark" className="mt-7">
+          <QuoteButton onClick={close} variant="dark" className="mt-7">
             Get a free quote
             <ChevronRight />
-          </CtaLink>
+          </QuoteButton>
         </div>
       </div>
     </dialog>

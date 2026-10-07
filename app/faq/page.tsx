@@ -39,7 +39,7 @@ export default function FaqPage() {
       <Section>
         <div className="grid gap-12 lg:grid-cols-[220px_1fr]">
           <nav aria-label="FAQ categories" className="hidden lg:block">
-            <ul className="sticky top-24 space-y-1">
+            <ul className="sticky top-36 space-y-1">
               {faqGroups.map((g) => (
                 <li key={g.title}>
                   <a
@@ -55,7 +55,7 @@ export default function FaqPage() {
 
           <div className="space-y-12">
             {faqGroups.map((g) => (
-              <div key={g.title} id={slugify(g.title)} className="scroll-mt-24">
+              <div key={g.title} id={slugify(g.title)} className="scroll-mt-36">
                 <h2 className="mb-5 text-2xl font-bold text-ink">{g.title}</h2>
                 <FaqList items={g.items} />
               </div>

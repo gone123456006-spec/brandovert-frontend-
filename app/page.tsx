@@ -1,10 +1,12 @@
 import { ArrowRight, CircleCheck } from "lucide-react";
 import { services } from "@/lib/content/services";
 import { caseStudies } from "@/lib/content/case-studies";
-import { clientLogos } from "@/lib/content/company";
+import { ClientLogos } from "@/components/site/client-logos";
+import { HeroIllustration } from "@/components/site/hero-illustration";
 import { homeFaqs } from "@/lib/content/faqs";
 import { CtaLink } from "@/components/site/cta";
 import { Carousel, CarouselItem } from "@/components/site/carousel";
+import { ServiceEnquiryButton } from "@/components/site/service-enquiry";
 import { Highlight, Section, SectionHeading } from "@/components/site/section";
 import {
   ComparisonTable,
@@ -12,7 +14,8 @@ import {
   FaqList,
   PortfolioCard,
   ProcessSteps,
-  ServiceCard,
+  ServiceCardBody,
+  serviceCardClass,
   StatsRow,
   Testimonials,
   WhyChooseUs,
@@ -28,7 +31,7 @@ export default function HomePage() {
   return (
     <>
       <section className="relative overflow-hidden bg-surface">
-        <div className="container-page grid items-center gap-14 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
+        <div className="container-page grid items-center gap-6 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
           <div>
             <h1 className="text-4xl leading-[1.1] font-extrabold text-ink sm:text-5xl lg:text-6xl">
               Build like the <Highlight>top 1%</Highlight> of tech companies.
@@ -56,28 +59,23 @@ export default function HomePage() {
             </div>
           </div>
 
-          <HeroPanel />
+          <HeroIllustration className="h-[330px] sm:h-[450px] lg:h-[500px] max-sm:[&>div]:scale-[0.5] sm:max-lg:[&>div]:scale-[0.7] lg:max-xl:[&>div]:scale-[0.72] xl:[&>div]:scale-[0.8]" />
         </div>
       </section>
 
-      <section aria-label="Clients" className="border-b border-border py-10">
+      <section aria-label="Clients" className="py-10">
         <div className="container-page">
           <p className="text-center text-sm font-medium text-muted-foreground">
             Trusted by startups and established businesses across India
           </p>
-          <ul className="mt-6 grid grid-cols-2 gap-x-8 gap-y-4 text-center sm:grid-cols-4 lg:grid-cols-8">
-            {clientLogos.map((name) => (
-              <li key={name} className="text-lg font-bold text-ink/35">
-                {name}
-              </li>
-            ))}
-          </ul>
+        </div>
+        <div className="mt-6">
+          <ClientLogos />
         </div>
       </section>
 
       <Section id="services">
         <SectionHeading
-          eyebrow="What we do"
           title={
             <>
               Everything you need to <Highlight>launch and grow</Highlight>
@@ -89,7 +87,12 @@ export default function HomePage() {
           <Carousel label="Services">
             {services.map((s) => (
               <CarouselItem key={s.slug}>
-                <ServiceCard service={s} />
+                <ServiceEnquiryButton
+                  service={{ slug: s.slug, title: s.title }}
+                  className={serviceCardClass}
+                >
+                  <ServiceCardBody service={s} />
+                </ServiceEnquiryButton>
               </CarouselItem>
             ))}
           </Carousel>
@@ -156,17 +159,21 @@ export default function HomePage() {
                 Products we&apos;ve <Highlight>designed and built</Highlight>
               </>
             }
-            description="Apps, platforms and websites now used by thousands of customers every day."
+            description="Mobile apps live on Google Play and websites live on the web, built for real businesses."
           />
           <CtaLink href="/work" variant="outline" size="md" className="self-start sm:self-auto">
             View full portfolio
             <ArrowRight />
           </CtaLink>
         </div>
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {caseStudies.map((c) => (
-            <PortfolioCard key={c.slug} study={c} />
-          ))}
+        <div className="mt-12">
+          <Carousel label="Portfolio">
+            {caseStudies.map((c) => (
+              <CarouselItem key={c.slug} className="flex [&>*]:w-full">
+                <PortfolioCard study={c} />
+              </CarouselItem>
+            ))}
+          </Carousel>
         </div>
       </Section>
 
@@ -195,63 +202,5 @@ export default function HomePage() {
 
       <CtaBand />
     </>
-  );
-}
-
-function HeroPanel() {
-  const rows = [
-    { label: "Discovery call", status: "Done", tone: "bg-ink text-white" },
-    { label: "Scope & fixed quote", status: "Done", tone: "bg-ink text-white" },
-    { label: "Sprint 3 of 6: Payments", status: "In progress", tone: "bg-brand/10 text-brand" },
-    { label: "App Store submission", status: "Week 10", tone: "bg-muted text-muted-foreground" },
-  ];
-
-  return (
-    <div className="relative" aria-hidden="true">
-      <div className="absolute -inset-4 -z-0 rounded-[2rem] bg-brand/10 blur-2xl" />
-      <div className="relative rounded-3xl border border-border bg-white p-6 shadow-[0_24px_60px_-24px_rgb(0_0_0/0.35)] sm:p-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Project</p>
-            <p className="text-lg font-bold text-ink">Customer mobile app</p>
-          </div>
-          <span className="rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white">On track</span>
-        </div>
-
-        <div className="mt-6">
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Progress</span>
-            <span className="font-semibold text-ink">58%</span>
-          </div>
-          <div className="mt-2 h-2 rounded-full bg-muted">
-            <div className="h-2 w-[58%] rounded-full bg-brand" />
-          </div>
-        </div>
-
-        <ul className="mt-6 space-y-3">
-          {rows.map((r) => (
-            <li key={r.label} className="flex items-center justify-between rounded-xl border border-border px-4 py-3">
-              <span className="text-sm font-medium text-ink">{r.label}</span>
-              <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${r.tone}`}>{r.status}</span>
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-6 grid grid-cols-3 gap-3 rounded-2xl bg-ink p-4 text-center text-white">
-          <div>
-            <p className="text-xl font-bold">6</p>
-            <p className="text-xs text-white/60">weekly demos</p>
-          </div>
-          <div>
-            <p className="text-xl font-bold">0</p>
-            <p className="text-xs text-white/60">surprise invoices</p>
-          </div>
-          <div>
-            <p className="text-xl font-bold">100%</p>
-            <p className="text-xs text-white/60">code ownership</p>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }

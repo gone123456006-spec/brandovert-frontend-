@@ -7,13 +7,15 @@ export function Logo({ tone = "dark", className }: { tone?: "dark" | "light"; cl
     <Link
       href="/"
       aria-label={`${site.name} home`}
-      className={cn("inline-flex items-center gap-2 text-lg font-bold", className)}
+      className={cn("inline-flex items-center font-logo text-lg font-normal", className)}
     >
-      <span className="grid size-[1.8em] place-items-center rounded-lg bg-brand text-[0.78em] font-extrabold text-white">
-        B
-      </span>
-      <span className={tone === "light" ? "text-white" : "text-ink"}>
-        brand<span className="text-brand">overt</span>
+      <span
+        className={cn(
+          "text-[1.25em] leading-none tracking-wider uppercase",
+          tone === "light" ? "text-white" : "text-ink"
+        )}
+      >
+        brandovert
       </span>
     </Link>
   );

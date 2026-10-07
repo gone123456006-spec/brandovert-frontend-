@@ -7,6 +7,16 @@ import { caseStudies } from "@/lib/content/case-studies";
 import { CtaLink } from "@/components/site/cta";
 import { Section, SectionHeading } from "@/components/site/section";
 import { CaseStudyCard, CtaBand, PageHero, ServiceCard } from "@/components/site/blocks";
+import { TechIcon } from "@/components/site/tech-icon";
+
+function TechChip({ name }: { name: string }) {
+  return (
+    <span className="inline-flex items-center gap-2 rounded-full border border-border bg-white py-1.5 pr-3.5 pl-2.5 text-sm font-medium text-ink">
+      <TechIcon name={name} className="size-4" />
+      {name}
+    </span>
+  );
+}
 
 export const dynamicParams = false;
 
@@ -32,7 +42,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
   return (
     <>
       <PageHero eyebrow="Services" title={service.title} description={service.description}>
-        <CtaLink href={`/contact?service=${service.slug}`} variant="light">
+        <CtaLink href={`/contact?service=${service.slug}`}>
           Get a quote for {service.title.toLowerCase()}
           <ArrowRight />
         </CtaLink>
@@ -42,9 +52,9 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
         <div className="grid gap-12 lg:grid-cols-[1.3fr_0.7fr]">
           <div>
             <h2 className="text-2xl font-bold text-ink sm:text-3xl">What&apos;s included</h2>
-            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+            <ul className="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2">
               {service.deliverables.map((d) => (
-                <li key={d} className="flex gap-3 rounded-xl border border-border p-4 font-medium text-ink">
+                <li key={d} className="flex gap-3 font-medium text-ink">
                   <CircleCheck className="mt-0.5 size-5 shrink-0 text-brand" />
                   {d}
                 </li>
@@ -52,16 +62,36 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
             </ul>
 
             <h2 className="mt-14 text-2xl font-bold text-ink sm:text-3xl">Technologies we use</h2>
-            <ul className="mt-6 flex flex-wrap gap-2">
-              {service.stack.map((t) => (
-                <li key={t} className="rounded-full bg-surface px-3.5 py-1.5 text-sm font-medium text-ink">
-                  {t}
-                </li>
-              ))}
-            </ul>
+            {service.techStack ? (
+              <dl className="mt-6 divide-y divide-border border-y border-border">
+                {service.techStack.map((group) => (
+                  <div
+                    key={group.label}
+                    className="grid grid-cols-[5.5rem_1fr] items-center gap-3 py-3 sm:grid-cols-[8rem_1fr]"
+                  >
+                    <dt className="text-xs font-semibold tracking-wide text-ink/55 uppercase">
+                      {group.label}
+                    </dt>
+                    <dd className="flex flex-wrap gap-2">
+                      {group.tools.map((t) => (
+                        <TechChip key={t} name={t} />
+                      ))}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            ) : (
+              <ul className="mt-6 flex flex-wrap gap-2">
+                {service.stack.map((t) => (
+                  <li key={t}>
+                    <TechChip name={t} />
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
-          <aside className="h-fit rounded-2xl bg-ink p-7 text-white lg:sticky lg:top-24">
+          <aside className="h-fit rounded-2xl bg-ink p-7 text-white lg:sticky lg:top-36">
             <p className="flex items-center gap-2 text-sm text-white/70">
               <Clock className="size-4" />
               Typical timeline

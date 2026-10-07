@@ -24,7 +24,8 @@ const boxClass =
   "relative flex items-center gap-3 rounded-xl bg-white py-1 pr-1.5 pl-3.5 transition-shadow focus-within:ring-3 focus-within:ring-brand/25 has-[[aria-invalid=true]]:ring-2 has-[[aria-invalid=true]]:ring-destructive";
 
 const inputClass =
-  "min-w-0 flex-1 bg-transparent py-2 text-sm text-ink outline-none placeholder:text-neutral-500";
+  // 16px on phones: iOS Safari zooms into any input whose font is smaller.
+  "min-w-0 flex-1 bg-transparent py-2 text-base text-ink outline-none placeholder:text-neutral-500 sm:text-sm";
 
 export function ContactForm({ defaultService }: { defaultService?: string }) {
   const [state, formAction, pending] = useActionState(submitContact, initialState);
@@ -146,8 +147,7 @@ export function ContactForm({ defaultService }: { defaultService?: string }) {
             {...a11y("consent")}
           />
           <span className="text-xs leading-relaxed text-neutral-700 italic">
-            I authorise {site.name} ({site.legalName}) and its representatives to contact me about my
-            enquiry via email, SMS, WhatsApp or call, even if my number is registered on DND/NDNC.
+            I agree to be contacted by {site.name} about my project.
           </span>
         </label>
         {err("consent") && (
@@ -160,7 +160,7 @@ export function ContactForm({ defaultService }: { defaultService?: string }) {
       <button
         type="submit"
         disabled={pending}
-        className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand text-sm font-bold text-white shadow-[0_10px_20px_-8px_rgb(225_6_0/0.6)] transition-colors outline-none hover:bg-brand-strong focus-visible:ring-3 focus-visible:ring-brand/40 disabled:opacity-60"
+        className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand text-sm font-bold text-white transition-colors outline-none hover:bg-brand-strong focus-visible:ring-3 focus-visible:ring-brand/40 disabled:opacity-60"
       >
         {pending ? <Loader2 className="size-5 animate-spin" /> : null}
         {pending ? "Sending..." : "Send enquiry"}

@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { ArrowRight } from "lucide-react";
 import { leadership, values } from "@/lib/content/company";
 import { site } from "@/lib/site";
 import { Carousel, CarouselItem } from "@/components/site/carousel";
-import { CtaLink } from "@/components/site/cta";
 import { Highlight, Section, SectionHeading } from "@/components/site/section";
 import { CtaBand, PageHero, StatsRow, Testimonials, WhyChooseUs } from "@/components/site/blocks";
 
@@ -24,15 +22,12 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
-        eyebrow="About us"
-        title="We build software the way the best product companies do"
+        title="Introducing Brandovert"
         description={`${site.name} is a team of engineers, designers and marketers who help businesses turn ideas into products customers actually use.`}
-      >
-        <CtaLink href="/contact" variant="light">
-          Work with us
-          <ArrowRight />
-        </CtaLink>
-      </PageHero>
+        hashtag="#BuildItRight"
+        prompt={{ href: "/contact", label: "Share your project idea…" }}
+        image={{ src: "/illustrations/hero/about.png", width: 720, height: 601 }}
+      />
 
       <Section>
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">

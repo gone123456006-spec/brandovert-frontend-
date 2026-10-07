@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
 import { caseStudies } from "@/lib/content/case-studies";
 import { Section } from "@/components/site/section";
-import { CaseStudyCard, CtaBand, PageHero, StatsRow } from "@/components/site/blocks";
+import {
+  CaseStudyCard,
+  CtaBand,
+  PageHero,
+  projectGridClass,
+  projectGridItemClass,
+  StatsRow,
+} from "@/components/site/blocks";
 
 export const metadata: Metadata = {
-  title: "Case Studies",
-  description: "Selected projects from Brandovert and the business results they delivered.",
+  title: "Our Work",
+  description: "Mobile apps and websites designed and built by Brandovert.",
 };
 
 export default function WorkPage() {
@@ -13,20 +20,22 @@ export default function WorkPage() {
     <>
       <PageHero
         eyebrow="Our work"
-        title="Case studies"
-        description="Real projects, real numbers. Here is what we built, why, and what changed for the business afterwards."
+        title="Apps and websites we've built"
+        description="Real products, live on Google Play and the web. See what we built for each client and why."
       />
       <Section>
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className={projectGridClass}>
           {caseStudies.map((c) => (
-            <CaseStudyCard key={c.slug} study={c} />
+            <div key={c.slug} className={projectGridItemClass}>
+              <CaseStudyCard study={c} />
+            </div>
           ))}
         </div>
       </Section>
       <Section tone="surface">
         <StatsRow />
       </Section>
-      <CtaBand title="Want results like these?" />
+      <CtaBand title="Want an app or website like these?" />
     </>
   );
 }

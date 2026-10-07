@@ -19,7 +19,7 @@ export default function ServicesPage() {
         title="From first wireframe to millionth user"
         description="Pick a single service or combine them. Every engagement has one project lead, a written scope and a fixed price."
       >
-        <CtaLink href="/contact" variant="light">
+        <CtaLink href="/contact">
           Discuss your project
           <ArrowRight />
         </CtaLink>

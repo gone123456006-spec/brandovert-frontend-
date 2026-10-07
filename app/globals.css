@@ -17,11 +17,88 @@
   --color-brand-soft-strong: var(--brand-soft-strong);
   --color-tint-strong: var(--tint-strong);
   --color-highlight: var(--highlight);
+  --color-sand: var(--sand);
+  --color-badge: var(--badge);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
+  --font-logo: var(--font-anton);
+  --font-poppins: var(--font-poppins);
+  --animate-marquee: marquee 50s linear infinite;
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  --animate-star-pop: star-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  @keyframes star-pop {
+    0% {
+      opacity: 0;
+      transform: scale(0) rotate(-90deg);
+    }
+    60% {
+      opacity: 1;
+      transform: scale(1.35) rotate(12deg);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotate(0);
+    }
+  }
+  --animate-nudge: nudge 1.2s ease-in-out infinite;
+  @keyframes nudge {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(5px);
+    }
+  }
+  /* Parts fly in, click into place, hold, then fly apart again; --ax/--ay/--az set where each part starts. */
+  --animate-assemble: assemble 10s infinite both;
+  @keyframes assemble {
+    0% {
+      opacity: 0;
+      transform: translate3d(var(--ax), var(--ay), var(--az));
+      animation-timing-function: cubic-bezier(0.55, 0, 0.25, 1.35);
+    }
+    3% {
+      opacity: 1;
+    }
+    11% {
+      transform: translate3d(0, 0, 0);
+      animation-timing-function: steps(1);
+    }
+    76% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      animation-timing-function: cubic-bezier(0.6, -0.3, 0.75, 0.4);
+    }
+    88% {
+      opacity: 1;
+      transform: translate3d(var(--ax), var(--ay), var(--az));
+    }
+    92%,
+    100% {
+      opacity: 0;
+      transform: translate3d(var(--ax), var(--ay), var(--az));
+    }
+  }
+  --animate-iso-bob-y: iso-bob-y 5s ease-in-out infinite;
+  @keyframes iso-bob-y {
+    50% {
+      transform: translateY(-14px);
+    }
+  }
+  --animate-iso-bob-z: iso-bob-z 5s ease-in-out infinite;
+  @keyframes iso-bob-z {
+    50% {
+      transform: translateZ(18px);
+    }
+  }
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -74,6 +151,8 @@
   --tint-strong: #daf1ea;
   /* Brighter red for small text and icons on black, where --brand lacks contrast. */
   --highlight: #ff3b30;
+  --sand: #f3f1ee;
+  --badge: #ffc979;
 
   --background: #ffffff;
   --foreground: #0a0a0a;
@@ -146,6 +225,11 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  /* clip, not hidden: hidden would break the sticky header. */
+  html,
+  body {
+    overflow-x: clip;
   }
   body {
     @apply bg-background text-foreground;

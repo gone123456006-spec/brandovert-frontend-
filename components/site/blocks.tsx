@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Check, ChevronDown, Quote, Star, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, ChevronDown, Quote, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { whatsappHref } from "@/lib/site";
 import { serviceIllustration, type Service } from "@/lib/content/services";
@@ -14,29 +14,93 @@ import {
   stats,
   testimonials,
 } from "@/lib/content/company";
-import { CtaAnchor, CtaLink } from "./cta";
-import { WhatsAppIcon } from "./brand-icons";
+import { CtaAnchor } from "./cta";
+import { GoogleIcon, WhatsAppIcon } from "./brand-icons";
 import { CountUp } from "./count-up";
+import { Pendulum } from "./pendulum";
+import { SwipeHintScroller } from "./swipe-hint-scroller";
+import { MobileSlider } from "./mobile-slider";
+import { QuoteButton } from "./service-enquiry";
+import { ProjectVisual } from "./project-visual";
+import { StarRating } from "./star-rating";
 
 export function PageHero({
   eyebrow,
   title,
   description,
+  hashtag,
+  prompt,
+  image,
   children,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: React.ReactNode;
   description: React.ReactNode;
+  hashtag?: string;
+  /** A wide white bar styled like an input that links somewhere, e.g. the contact form. */
+  prompt?: { href: string; label: string };
+  image?: { src: string; width: number; height: number };
   children?: React.ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden bg-ink text-white">
-      <div aria-hidden="true" className="bg-grid absolute inset-0 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
-      <div className="container-page relative py-20 sm:py-24">
-        <p className="mb-4 text-sm font-semibold tracking-wider text-highlight uppercase">{eyebrow}</p>
-        <h1 className="max-w-3xl text-4xl leading-tight font-bold sm:text-5xl">{title}</h1>
-        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/75">{description}</p>
-        {children && <div className="mt-8 flex flex-wrap gap-3">{children}</div>}
+    <section className="overflow-hidden bg-sand">
+      <div
+        className={cn(
+          "container-page grid items-center gap-3 py-8 sm:gap-10 sm:py-14 lg:py-16",
+          image &&
+            "grid-cols-[minmax(0,1fr)_6.5rem] sm:grid-cols-[minmax(0,1fr)_14rem] lg:grid-cols-[1.4fr_0.6fr]"
+        )}
+      >
+        <div className="min-w-0">
+          {eyebrow && (
+            <p className="mb-3 inline-block rounded-md bg-badge px-2.5 py-1 text-xs font-bold text-ink sm:text-sm">
+              {eyebrow}
+            </p>
+          )}
+          <h1
+            className={cn(
+              "max-w-3xl leading-tight font-bold text-balance text-brand-strong",
+              // With an image beside it, the heading scales with the viewport so it stays on one line.
+              image
+                ? "text-[min(2.25rem,calc(8.6vw_-_14px))] whitespace-nowrap sm:text-[min(3rem,calc(8.6vw_-_29px))] lg:text-5xl"
+                : "text-[2rem] sm:text-5xl"
+            )}
+          >
+            {title}
+          </h1>
+          <p
+            className={cn(
+              "mt-2 max-w-2xl leading-relaxed text-ink sm:mt-3 sm:text-lg",
+              image ? "text-[0.8rem]" : "text-base"
+            )}
+          >
+            {description}
+          </p>
+          {hashtag && (
+            <p className="mt-1.5 text-sm font-bold text-neutral-400 sm:mt-2 sm:text-xl">{hashtag}</p>
+          )}
+          {prompt && (
+            <Link
+              href={prompt.href}
+              className="group mt-4 flex h-10 w-full max-w-xl items-center justify-between gap-2 rounded-md bg-white px-3 text-xs text-neutral-400 shadow-[0_1px_2px_rgb(0_0_0/0.04)] transition hover:text-neutral-600 hover:shadow-md sm:mt-7 sm:h-14 sm:gap-3 sm:px-4 sm:text-base"
+            >
+              <span className="truncate">{prompt.label}</span>
+              <ArrowRight className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5 sm:size-5" />
+            </Link>
+          )}
+          {children && <div className="mt-6 flex flex-wrap gap-3 sm:mt-7">{children}</div>}
+        </div>
+        {image && (
+          <Image
+            src={image.src}
+            alt=""
+            width={image.width}
+            height={image.height}
+            priority
+            sizes="(min-width: 1024px) 320px, (min-width: 640px) 224px, 120px"
+            className="mx-auto w-full lg:max-w-xs"
+          />
+        )}
       </div>
     </section>
   );
@@ -59,12 +123,20 @@ export function StatsRow({ tone = "light" }: { tone?: "light" | "dark" }) {
   );
 }
 
+export const serviceCardClass =
+  "group flex h-full w-full flex-col items-center rounded-[1.75rem] bg-tint px-4 pt-5 pb-6 text-center sm:px-6 sm:pt-6 sm:pb-7 transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgb(0_0_0/0.25)]";
+
 export function ServiceCard({ service }: { service: Service }) {
   return (
-    <Link
-      href={`/services/${service.slug}`}
-      className="group flex h-full flex-col items-center rounded-[1.75rem] bg-tint px-6 pt-6 pb-7 text-center transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgb(0_0_0/0.25)]"
-    >
+    <Link href={`/services/${service.slug}`} className={serviceCardClass}>
+      <ServiceCardBody service={service} />
+    </Link>
+  );
+}
+
+export function ServiceCardBody({ service }: { service: Service }) {
+  return (
+    <>
       <span className="rounded-full bg-ink px-3 py-1 text-xs font-bold text-white transition-colors group-hover:bg-brand">
         {service.category}
       </span>
@@ -75,13 +147,13 @@ export function ServiceCard({ service }: { service: Service }) {
         width={640}
         height={640}
         sizes="200px"
-        className="mt-4 size-44 mix-blend-multiply transition-transform duration-300 group-hover:scale-105"
+        className="mt-3 size-32 mix-blend-multiply sm:mt-4 sm:size-44 transition-transform duration-300 group-hover:scale-105"
       />
-      <h3 className="mt-4 text-lg leading-snug font-bold text-ink">{service.title}</h3>
-      <p className="mt-1.5 max-w-[17rem] text-sm leading-relaxed text-muted-foreground">
+      <h3 className="mt-3 text-base leading-snug font-bold text-ink sm:mt-4 sm:text-lg">{service.title}</h3>
+      <p className="mt-1.5 max-w-[17rem] text-[0.8rem] leading-relaxed text-muted-foreground sm:text-sm">
         {service.summary}
       </p>
-      <ul className="mt-auto grid grid-cols-[repeat(2,6.5rem)] justify-center gap-2 pt-5">
+      <ul className="mt-auto grid grid-cols-[repeat(2,minmax(0,6.5rem))] justify-center gap-2 pt-4 sm:pt-5">
         {service.stack.slice(0, 4).map((t) => (
           <li
             key={t}
@@ -91,14 +163,25 @@ export function ServiceCard({ service }: { service: Service }) {
           </li>
         ))}
       </ul>
-    </Link>
+    </>
   );
 }
 
-const accentStyles: Record<CaseStudy["accent"], string> = {
-  red: "from-brand to-brand-strong",
-  black: "from-ink-soft to-ink",
-};
+function ProjectName({ study, className }: { study: CaseStudy; className?: string }) {
+  return (
+    <h3 className={cn("flex items-center gap-2.5 font-bold", className)}>
+      {study.icon && (
+        <Image src={study.icon} alt="" width={64} height={64} className="size-9 shrink-0 rounded-[0.6rem] bg-white" />
+      )}
+      {study.client}
+    </h3>
+  );
+}
+
+// A centred wrap rather than a grid, so a short last row sits in the middle.
+export const projectGridClass = "flex flex-wrap justify-center gap-6";
+export const projectGridItemClass =
+  "flex w-full sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)] [&>*]:w-full";
 
 export function PortfolioCard({ study }: { study: CaseStudy }) {
   return (
@@ -106,23 +189,15 @@ export function PortfolioCard({ study }: { study: CaseStudy }) {
       href={`/work/${study.slug}`}
       className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-[0_10px_30px_-12px_rgb(0_0_0/0.18)] transition-all duration-300 hover:-translate-y-1 hover:bg-brand hover:shadow-[0_20px_40px_-16px_rgb(225_6_0/0.5)]"
     >
-      <div className="overflow-hidden">
-        <Image
-          src={study.image}
-          alt={`${study.client} project screens`}
-          width={1200}
-          height={900}
-          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-          className="aspect-[3/2] w-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      </div>
+      <ProjectVisual study={study} />
       <div className="flex flex-1 flex-col p-6">
         <p className="text-xs font-semibold tracking-wider text-brand uppercase transition-colors group-hover:text-white/80">
-          {study.industry}
+          {study.kind === "app" ? "Mobile app" : "Website"} · {study.industry}
         </p>
-        <h3 className="mt-1.5 text-2xl font-bold text-ink transition-colors group-hover:text-white">
-          {study.client}
-        </h3>
+        <ProjectName
+          study={study}
+          className="mt-2 text-2xl text-ink transition-colors group-hover:text-white"
+        />
         <p className="mt-4 leading-relaxed text-muted-foreground transition-colors group-hover:text-white/90">
           {study.summary}
         </p>
@@ -141,21 +216,24 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
       href={`/work/${study.slug}`}
       className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-white transition-shadow hover:shadow-[0_16px_40px_-16px_rgb(0_0_0/0.25)]"
     >
-      <div className={cn("relative flex h-44 items-end bg-linear-to-br p-6", accentStyles[study.accent])}>
-        <div aria-hidden="true" className="bg-grid absolute inset-0 opacity-60" />
-        <div className="relative">
-          <p className="text-xs font-semibold tracking-wider text-white/80 uppercase">{study.industry}</p>
-          <p className="text-2xl font-bold text-white">{study.client}</p>
-        </div>
-        <ArrowUpRight className="absolute top-5 right-5 size-6 text-white/80 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+      <div className="relative">
+        <ProjectVisual study={study} sizes="(min-width: 768px) 50vw, 100vw" />
+        <ArrowUpRight className="absolute top-4 right-4 size-8 rounded-full bg-white p-1.5 text-ink shadow transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
       </div>
       <div className="flex flex-1 flex-col p-6">
-        <h3 className="text-lg leading-snug font-bold text-ink">{study.title}</h3>
-        <dl className="mt-6 grid grid-cols-3 gap-3 border-t border-border pt-5">
+        <p className="text-xs font-semibold tracking-wider text-brand uppercase">
+          {study.kind === "app" ? "Mobile app" : "Website"} · {study.industry}
+        </p>
+        <ProjectName study={study} className="mt-2 text-xl text-ink" />
+        <p className="mt-3 mb-6 leading-snug font-semibold text-ink">{study.title}</p>
+        {/* Pinned to the bottom so stats and tags line up across cards in the same row. */}
+        <dl className="mt-auto grid grid-cols-3 gap-x-3 border-t border-border pt-5">
           {study.results.map((r) => (
-            <div key={r.label} className="flex flex-col-reverse">
-              <dt className="text-xs leading-snug text-muted-foreground">{r.label}</dt>
-              <dd className="text-xl font-bold text-brand">{r.value}</dd>
+            <div key={r.label} className="flex min-w-0 flex-col-reverse justify-end">
+              <dt className="mt-0.5 min-h-[2lh] text-xs lg:min-h-[3lh] xl:min-h-[2lh] leading-snug text-muted-foreground">{r.label}</dt>
+              <dd className="text-lg leading-tight font-bold whitespace-nowrap text-brand sm:text-xl lg:text-lg xl:text-xl">
+                {r.value}
+              </dd>
             </div>
           ))}
         </dl>
@@ -173,11 +251,12 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
 
 export function WhyChooseUs() {
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    // Phones: one card at a time in a swipeable row, with the next card peeking in.
+    <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pt-1 pb-4 [scrollbar-width:none] sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:p-0 lg:grid-cols-3 [&::-webkit-scrollbar]:hidden">
       {reasons.map((r) => (
         <div
           key={r.title}
-          className="group flex flex-col rounded-[2.5rem] bg-tint-mid px-8 pt-6 pb-10 transition-transform duration-300 hover:-translate-y-1 sm:px-10"
+          className="group flex w-[85%] shrink-0 snap-center flex-col rounded-[2.5rem] bg-tint-mid px-6 pt-6 pb-8 transition-transform duration-300 hover:-translate-y-1 sm:w-auto sm:px-10 sm:pb-10"
         >
           <Image
             src={r.illustration}
@@ -188,7 +267,7 @@ export function WhyChooseUs() {
             className="mx-auto aspect-[4/3] w-full max-w-[16rem] object-contain mix-blend-multiply transition-transform duration-300 group-hover:scale-105"
           />
           <h3 className="mt-4 text-xl leading-snug font-medium text-ink sm:text-[1.4rem]">{r.title}</h3>
-          <p className="mt-3 text-lg leading-[1.75] text-neutral-600">{r.body}</p>
+          <p className="mt-3 text-base leading-[1.7] text-neutral-600 sm:text-lg sm:leading-[1.75]">{r.body}</p>
         </div>
       ))}
     </div>
@@ -219,7 +298,10 @@ export function ProcessSteps() {
               <span className="relative size-4 rounded-full bg-ink ring-4 ring-tint-strong" />
             </div>
 
-            <div className="relative mt-6 w-full flex-1 rounded-[2rem] bg-tint-strong px-6 pt-7 pb-6 shadow-[0_18px_30px_-18px_rgb(0_0_0/0.3)]">
+            <Pendulum
+              index={i}
+              className="relative mt-6 w-full flex-1 rounded-[2rem] bg-tint-strong px-6 pt-7 pb-6 shadow-[0_18px_30px_-18px_rgb(0_0_0/0.3)]"
+            >
               <span
                 aria-hidden="true"
                 className="absolute -top-2 left-1/2 size-5 -translate-x-1/2 rotate-45 rounded-[5px] bg-tint-strong"
@@ -231,7 +313,7 @@ export function ProcessSteps() {
                 </span>
               </div>
               <p className="mt-3 text-[0.95rem] leading-relaxed text-ink/70">{p.body}</p>
-            </div>
+            </Pendulum>
           </li>
         );
       })}
@@ -241,30 +323,22 @@ export function ProcessSteps() {
 
 export function Testimonials() {
   return (
-    <div className="grid gap-6 md:grid-cols-2">
+    <MobileSlider label="Client testimonials" className="sm:grid sm:gap-6 md:grid-cols-2">
       {testimonials.map((t) => (
         <figure
           key={t.name}
-          className="flex flex-col rounded-[2.5rem] bg-tint-mid px-8 py-10 transition-transform duration-200 hover:-translate-y-1 sm:px-10"
+          className="flex w-[85%] shrink-0 snap-center flex-col rounded-[2.5rem] px-6 py-8 transition-transform duration-200 hover:-translate-y-1 sm:w-auto sm:px-10 sm:py-10"
         >
           <div className="flex items-center justify-between">
-            <div className="flex gap-0.5 text-highlight" aria-label="Rated 5 out of 5">
-              {Array.from({ length: 5 }, (_, i) => (
-                <Star key={i} className="size-4 fill-current" />
-              ))}
-            </div>
+            <StarRating className="text-highlight" />
             <Quote className="size-9 fill-tint-strong text-tint-strong" />
           </div>
-          <blockquote className="mt-5 flex-1 text-lg leading-relaxed text-neutral-600">
+          <blockquote className="mt-5 flex-1 text-base leading-relaxed text-neutral-600 sm:text-lg">
             “{t.quote}”
           </blockquote>
           <figcaption className="mt-8 flex items-center gap-3 border-t border-ink/10 pt-6">
-            <span className="grid size-11 place-items-center rounded-full bg-ink text-sm font-bold text-white">
-              {t.name
-                .replace("Dr. ", "")
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
+            <span className="grid size-11 shrink-0 place-items-center rounded-full bg-white shadow-[0_2px_8px_-2px_rgb(0_0_0/0.25)] ring-1 ring-ink/5">
+              <GoogleIcon className="size-6" />
             </span>
             <span>
               <span className="block text-[1.05rem] font-medium text-ink">{t.name}</span>
@@ -275,7 +349,7 @@ export function Testimonials() {
           </figcaption>
         </figure>
       ))}
-    </div>
+    </MobileSlider>
   );
 }
 
@@ -309,7 +383,7 @@ export function ComparisonTable() {
   const ours = comparisonColumns.length - 1;
 
   return (
-    <div className="overflow-x-auto rounded-[2rem]">
+    <SwipeHintScroller className="overflow-x-auto rounded-[2rem]">
       <table className="w-full min-w-[640px] border-collapse text-left">
         <caption className="sr-only">How Brandovert compares with freelancers and typical agencies</caption>
         <thead>
@@ -361,9 +435,12 @@ export function ComparisonTable() {
           ))}
         </tbody>
       </table>
-    </div>
+    </SwipeHintScroller>
   );
 }
+
+const ctaMobileClass =
+  "max-sm:h-14 max-sm:gap-1.5 max-sm:px-2 max-sm:text-[0.95rem] max-sm:leading-tight max-sm:whitespace-normal max-sm:[&_svg]:size-5";
 
 export function CtaBand({
   title = "Have a project in mind?",
@@ -375,30 +452,36 @@ export function CtaBand({
   return (
     <section className="py-20">
       <div className="container-page">
-        <div className="relative rounded-3xl bg-brand px-8 py-14 sm:px-14">
+        <div className="relative rounded-3xl bg-brand px-5 py-14 sm:px-14">
           <div aria-hidden="true" className="bg-grid absolute inset-0 rounded-3xl opacity-70" />
-          <Image
-            src="/illustrations/cta/person-phone.png"
-            alt=""
-            width={640}
-            height={725}
-            sizes="288px"
-            className="pointer-events-none absolute right-10 -bottom-6 hidden w-72 md:block xl:right-24"
-          />
-          <div className="relative md:max-w-[55%]">
+          <div className="relative px-3 sm:px-0 md:max-w-[55%]">
             <h2 className="text-3xl font-bold text-white sm:text-4xl">{title}</h2>
             <p className="mt-3 text-lg text-white/85">{description}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <CtaLink href="/contact" variant="light">
+            <div className="mt-8 grid grid-cols-2 gap-2.5 max-sm:-mx-3 sm:flex sm:flex-wrap sm:gap-3">
+              <QuoteButton variant="light" className={ctaMobileClass}>
                 Get a free quote
                 <ArrowRight />
-              </CtaLink>
-              <CtaAnchor href={whatsappHref()} target="_blank" rel="noopener noreferrer" variant="ghostDark">
+              </QuoteButton>
+              <CtaAnchor
+                href={whatsappHref()}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="ghostDark"
+                className={ctaMobileClass}
+              >
                 <WhatsAppIcon />
                 Chat on WhatsApp
               </CtaAnchor>
             </div>
           </div>
+          <Image
+            src="/illustrations/cta/person-phone.png"
+            alt=""
+            width={640}
+            height={725}
+            sizes="(min-width: 768px) 288px, 208px"
+            className="pointer-events-none relative mx-auto mt-8 -mb-20 w-52 md:absolute md:right-10 md:-bottom-6 md:m-0 md:w-72 xl:right-24"
+          />
         </div>
       </div>
     </section>
