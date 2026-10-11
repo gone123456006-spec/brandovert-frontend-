@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Anton, Plus_Jakarta_Sans, Geist_Mono, Poppins } from "next/font/google";
+import { Anton, Fraunces, Plus_Jakarta_Sans, Geist_Mono, Poppins } from "next/font/google";
 import { site } from "@/lib/site";
 import { AnnouncementBar } from "@/components/site/announcement-bar";
 import { AudioUnlock } from "@/components/site/count-up";
@@ -33,6 +33,12 @@ const poppins = Poppins({
   subsets: ["latin"],
 });
 
+const display = Fraunces({
+  variable: "--font-display",
+  subsets: ["latin"],
+  axes: ["SOFT", "WONK", "opsz"],
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
@@ -50,7 +56,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${sans.variable} ${anton.variable} ${geistMono.variable} ${poppins.variable} h-full antialiased`}>
+    <html lang="en" className={`${sans.variable} ${anton.variable} ${geistMono.variable} ${poppins.variable} ${display.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <a
           href="#main"

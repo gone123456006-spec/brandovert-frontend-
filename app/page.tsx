@@ -38,8 +38,10 @@ export default function HomePage() {
         </div>
         <div className="container-page grid items-center gap-6 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:pt-14 lg:pb-20">
           <div className="lg:-mt-4">
-            <h1 className="text-4xl leading-[1.1] font-extrabold text-ink sm:text-5xl lg:text-6xl">
-              Build like the <Highlight>top 1%</Highlight> of tech companies.
+            <h1 className="text-soft-display text-4xl leading-[1.08] text-ink sm:text-5xl lg:text-[4.1rem]">
+              Build like the <Highlight>
+                top 1<span className="inline-block origin-[50%_60%] motion-safe:animate-percent-spin">%</span>
+              </Highlight> of tech companies.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
               Brandovert designs, builds, markets and maintains software for growing businesses: web

@@ -26,6 +26,7 @@
   --font-heading: var(--font-sans);
   --font-logo: var(--font-anton);
   --font-poppins: var(--font-poppins);
+  --font-display: var(--font-display);
   --animate-marquee: marquee 50s linear infinite;
   @keyframes marquee {
     to {
@@ -149,6 +150,25 @@
     100% {
       opacity: 0;
       transform: scale(0.8);
+    }
+  }
+  --animate-percent-spin: percent-spin 3.5s ease-in-out infinite;
+  @keyframes percent-spin {
+    0%,
+    55% {
+      transform: translateY(0) rotate(0deg) scale(1);
+    }
+    65% {
+      transform: translateY(-0.2em) rotate(-20deg) scale(1.15);
+    }
+    82% {
+      transform: translateY(0) rotate(375deg) scale(1);
+    }
+    90% {
+      transform: translateY(-0.04em) rotate(355deg) scale(1.03);
+    }
+    100% {
+      transform: translateY(0) rotate(360deg) scale(1);
     }
   }
   --animate-iso-bob-y: iso-bob-y 6s ease-in-out infinite;
@@ -311,6 +331,14 @@
 
 @utility container-page {
   @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+}
+
+@utility text-soft-display {
+  font-family: var(--font-display), serif;
+  font-weight: 900;
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+  letter-spacing: -0.01em;
+  text-shadow: 0 0.06em 0.1em rgb(0 0 0 / 0.14);
 }
 
 @utility bg-grid {
