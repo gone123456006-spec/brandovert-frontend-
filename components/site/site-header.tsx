@@ -59,8 +59,18 @@ export function SiteHeader() {
         menuButton.current?.focus();
       }
     };
+    const onPointerDown = (e: PointerEvent) => {
+      const target = e.target as Element;
+      if (!menuButton.current?.contains(target) && !target.closest("#services-menu")) {
+        setMenuOpen(false);
+      }
+    };
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
   }, [menuOpen]);
 
   useEffect(() => () => clearTimeout(closeTimer.current), []);
@@ -69,6 +79,7 @@ export function SiteHeader() {
     clearTimeout(closeTimer.current);
     setMenuOpen(true);
   };
+  const keepMenuOpen = () => clearTimeout(closeTimer.current);
   const closeMenuSoon = () => {
     clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(() => setMenuOpen(false), CLOSE_DELAY_MS);
@@ -90,33 +101,23 @@ export function SiteHeader() {
               <div
                 key={item.href}
                 className="flex items-center"
-                onMouseEnter={openMenu}
+                onMouseEnter={keepMenuOpen}
                 onMouseLeave={closeMenuSoon}
               >
-                <Link
-                  href={item.href}
-                  onClick={closeMenu}
-                  aria-current={isActive(pathname, item.href) ? "page" : undefined}
-                  className={cn(
-                    "rounded-lg py-2 pl-2.5 text-[0.95rem] font-medium whitespace-nowrap text-ink/75 xl:pl-3 transition-colors hover:text-ink",
-                    (menuOpen || isActive(pathname, item.href)) && "text-brand hover:text-brand"
-                  )}
-                >
-                  {item.label}
-                </Link>
                 <button
                   ref={menuButton}
                   type="button"
-                  aria-label="Show services menu"
                   aria-expanded={menuOpen}
                   aria-controls="services-menu"
                   onClick={() => (menuOpen ? closeMenu() : openMenu())}
                   className={cn(
-                    "grid size-8 place-items-center rounded-lg text-ink/75 hover:text-ink",
+                    "flex items-center gap-1 rounded-lg px-2.5 py-2 text-[0.95rem] font-medium whitespace-nowrap text-ink/75 transition-colors hover:text-ink xl:px-3",
                     (menuOpen || isActive(pathname, item.href)) && "text-brand hover:text-brand"
                   )}
                 >
+                  {item.label}
                   <ChevronDown
+                    aria-hidden
                     className={cn("size-4 transition-transform", menuOpen && "rotate-180")}
                   />
                 </button>
@@ -163,7 +164,7 @@ export function SiteHeader() {
 
       <div
         id="services-menu"
-        onMouseEnter={openMenu}
+        onMouseEnter={keepMenuOpen}
         onMouseLeave={closeMenuSoon}
         className={cn(
           "absolute inset-x-0 top-full hidden transition duration-200 lg:block",

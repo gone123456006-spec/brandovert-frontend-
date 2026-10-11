@@ -57,46 +57,110 @@
       transform: translateX(5px);
     }
   }
-  /* Parts fly in, click into place, hold, then fly apart again; --ax/--ay/--az set where each part starts. */
-  --animate-assemble: assemble 10s infinite both;
+  /*
+   * Hero illustration loop (14s, shared by all four animations so they stay in step):
+   * parts pop up spread apart (0-4%), are outlined one by one while their details build (13-20% each),
+   * click together (40-50%), hold, then come apart (84-93%). --ax/--ay/--az is a part's spread-out offset.
+   */
+  --animate-assemble: assemble 14s infinite both;
   @keyframes assemble {
     0% {
       opacity: 0;
-      transform: translate3d(var(--ax), var(--ay), var(--az));
-      animation-timing-function: cubic-bezier(0.55, 0, 0.25, 1.35);
+      transform: translate3d(var(--ax), var(--ay), var(--az)) scale(0.85);
+      animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
     }
-    3% {
+    7% {
       opacity: 1;
+      transform: translate3d(var(--ax), var(--ay), var(--az)) scale(1);
     }
-    11% {
-      transform: translate3d(0, 0, 0);
-      animation-timing-function: steps(1);
+    39% {
+      transform: translate3d(var(--ax), var(--ay), var(--az)) scale(1);
+      animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
     }
-    76% {
+    53% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    81% {
       opacity: 1;
-      transform: translate3d(0, 0, 0);
-      animation-timing-function: cubic-bezier(0.6, -0.3, 0.75, 0.4);
+      transform: translate3d(0, 0, 0) scale(1);
+      animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
     }
-    88% {
+    93% {
       opacity: 1;
-      transform: translate3d(var(--ax), var(--ay), var(--az));
+      transform: translate3d(var(--ax), var(--ay), var(--az)) scale(1);
+      animation-timing-function: ease-in-out;
     }
-    92%,
     100% {
       opacity: 0;
-      transform: translate3d(var(--ax), var(--ay), var(--az));
+      transform: translate3d(var(--ax), var(--ay), var(--az)) scale(0.85);
     }
   }
-  --animate-iso-bob-y: iso-bob-y 5s ease-in-out infinite;
+  --animate-part-label: part-label 14s ease-in-out infinite both;
+  @keyframes part-label {
+    0%,
+    4% {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    9%,
+    35% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    41%,
+    100% {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+  --animate-part-focus: part-focus 14s ease-in-out infinite both;
+  @keyframes part-focus {
+    0%,
+    10% {
+      opacity: 0;
+      transform: scale(1.04);
+    }
+    14%,
+    19% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    24%,
+    100% {
+      opacity: 0;
+      transform: scale(1);
+    }
+  }
+  --animate-part-detail: part-detail 14s infinite both;
+  @keyframes part-detail {
+    0%,
+    12% {
+      opacity: 0;
+      transform: scale(0.6);
+      animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    17%,
+    90% {
+      opacity: 1;
+      transform: scale(1);
+      animation-timing-function: ease-in-out;
+    }
+    96%,
+    100% {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+  }
+  --animate-iso-bob-y: iso-bob-y 6s ease-in-out infinite;
   @keyframes iso-bob-y {
     50% {
-      transform: translateY(-14px);
+      transform: translateY(-10px);
     }
   }
-  --animate-iso-bob-z: iso-bob-z 5s ease-in-out infinite;
+  --animate-iso-bob-z: iso-bob-z 6s ease-in-out infinite;
   @keyframes iso-bob-z {
     50% {
-      transform: translateZ(18px);
+      transform: translateZ(12px);
     }
   }
   --color-sidebar-ring: var(--sidebar-ring);

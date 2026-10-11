@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { services, type Service, type ServiceCategory } from "@/lib/content/services";
 
@@ -87,20 +86,6 @@ export function ServicesMenuPanel({ onNavigate }: { onNavigate: () => void }) {
             );
           })}
           <div aria-hidden className="col-start-2 row-start-1 w-px bg-border" />
-        </div>
-
-        <div className="mt-6 flex items-center justify-between gap-4 border-t border-border pt-5">
-          <p className="text-sm text-neutral-500">
-            Not sure what you need? We&apos;ll help you scope it for free.
-          </p>
-          <Link
-            href="/services"
-            onClick={onNavigate}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline"
-          >
-            View all services
-            <ArrowRight className="size-4" aria-hidden />
-          </Link>
         </div>
       </div>
     </div>

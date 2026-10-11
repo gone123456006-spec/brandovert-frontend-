@@ -115,7 +115,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
 
       {relatedWork.length > 0 && (
         <Section tone="surface">
-          <SectionHeading align="left" eyebrow="Related work" title={`${service.title} in practice`} />
+          <SectionHeading align="left" title={`${service.title} in practice`} />
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             {relatedWork.map((c) => (
               <CaseStudyCard key={c.slug} study={c} />

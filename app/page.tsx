@@ -30,9 +30,14 @@ const heroPoints = [
 export default function HomePage() {
   return (
     <>
-      <section className="relative overflow-hidden bg-surface">
-        <div className="container-page grid items-center gap-6 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
-          <div>
+      <section className="relative isolate overflow-hidden bg-gradient-to-b from-white via-surface to-white">
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-[radial-gradient(circle,rgb(0_0_0/0.13)_1px,transparent_1.5px)] bg-[size:22px_22px] [mask-image:radial-gradient(ellipse_75%_70%_at_60%_45%,black_30%,transparent_80%)]" />
+          <div className="absolute -top-32 -left-32 size-[520px] rounded-full bg-white blur-[90px]" />
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-white" />
+        </div>
+        <div className="container-page grid items-center gap-6 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:pt-14 lg:pb-20">
+          <div className="lg:-mt-4">
             <h1 className="text-4xl leading-[1.1] font-extrabold text-ink sm:text-5xl lg:text-6xl">
               Build like the <Highlight>top 1%</Highlight> of tech companies.
             </h1>
@@ -59,7 +64,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <HeroIllustration className="h-[330px] sm:h-[450px] lg:h-[500px] max-sm:[&>div]:scale-[0.5] sm:max-lg:[&>div]:scale-[0.7] lg:max-xl:[&>div]:scale-[0.72] xl:[&>div]:scale-[0.8]" />
+          <HeroIllustration className="h-[290px] sm:h-[390px] lg:h-[440px] lg:translate-y-12 max-sm:[&>div]:scale-[0.43] sm:max-lg:[&>div]:scale-[0.6] lg:max-xl:[&>div]:scale-[0.62] xl:[&>div]:scale-[0.68]" />
         </div>
       </section>
 
