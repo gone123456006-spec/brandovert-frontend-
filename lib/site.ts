@@ -4,13 +4,17 @@ export const site = {
   tagline: "Software, growth and support under one roof.",
   description:
     "Brandovert is a technology partner for growing businesses. We design, build, market and maintain web apps, mobile apps, SaaS products and custom software.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : "http://localhost:3000"),
   contact: {
     phoneDisplay: "+91 98750 73267",
     phoneHref: "tel:+919875073267",
     whatsappNumber: "919875073267",
     whatsappMessage: "Hi Brandovert, I'd like to discuss a project.",
-    email: "brandoverts@gmail.com",
+    email: "brandovertofc@gmail.com",
     hours: "Mon to Sat, 10:00 AM to 7:00 PM IST",
     address: {
       line1: "3rd Floor, 20, 100 Feet Road",

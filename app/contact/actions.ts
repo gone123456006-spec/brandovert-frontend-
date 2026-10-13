@@ -2,6 +2,8 @@
 
 import { z } from "zod";
 import { contactSchema, type ContactField, type ContactState } from "@/lib/contact-schema";
+import { ApiError } from "@/lib/api";
+import { createEnquiry } from "@/lib/vertbook/enquiries";
 
 const fields: ContactField[] = ["name", "email", "phone", "service", "message", "consent"];
 
@@ -34,6 +36,9 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
     await deliver(parsed.data);
   } catch (error) {
     console.error("Contact form delivery failed", error);
+    if (error instanceof ApiError && (error.status === 400 || error.status === 429)) {
+      return { status: "error", message: error.message, errors: error.fieldErrors, values };
+    }
     return {
       status: "error",
       message: "Something went wrong sending your message. Please try WhatsApp or call us instead.",
@@ -47,16 +52,22 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
   };
 }
 
+/** Succeeds if the enquiry reached the database or the webhook, so one outage doesn't lose it. */
 async function deliver(data: z.infer<typeof contactSchema>) {
+  const { name, email, phone, service, message } = data;
   const webhook = process.env.CONTACT_WEBHOOK_URL;
-  if (!webhook) {
-    if (process.env.NODE_ENV === "production") {
-      throw new Error("CONTACT_WEBHOOK_URL is not configured");
-    }
-    console.info("[contact] CONTACT_WEBHOOK_URL not set; enquiry logged locally:", data);
-    return;
+  const results = await Promise.allSettled([
+    createEnquiry({ name, email, phone, service, message }),
+    ...(webhook ? [sendToWebhook(webhook, data)] : []),
+  ]);
+  const failures = results.filter((r) => r.status === "rejected");
+  failures.forEach((f) => console.error("[contact]", f.reason));
+  if (failures.length === results.length) {
+    throw failures[0]!.reason;
   }
+}
 
+async function sendToWebhook(webhook: string, data: z.infer<typeof contactSchema>) {
   const res = await fetch(webhook, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

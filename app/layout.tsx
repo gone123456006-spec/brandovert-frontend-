@@ -4,6 +4,7 @@ import { site } from "@/lib/site";
 import { AnnouncementBar } from "@/components/site/announcement-bar";
 import { AudioUnlock } from "@/components/site/count-up";
 import { SiteHeader } from "@/components/site/site-header";
+import { SiteChrome } from "@/components/site/site-chrome";
 import { SiteFooter } from "@/components/site/site-footer";
 import { WhatsAppFloat } from "@/components/site/whatsapp-float";
 import { WelcomePopup } from "@/components/site/welcome-popup";
@@ -65,15 +66,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <ServiceEnquiryProvider>
-          <AnnouncementBar />
-          <SiteHeader />
+          <SiteChrome>
+            <AnnouncementBar />
+            <SiteHeader />
+          </SiteChrome>
           <main id="main" className="flex-1">
             {children}
           </main>
-          <SiteFooter />
-          <WhatsAppFloat />
-          <WelcomePopup />
-          <AudioUnlock />
+          <SiteChrome>
+            <SiteFooter />
+            <WhatsAppFloat />
+            <WelcomePopup />
+            <AudioUnlock />
+          </SiteChrome>
         </ServiceEnquiryProvider>
       </body>
     </html>
