@@ -6,9 +6,7 @@ export const site = {
     "Brandovert is a technology partner for growing businesses. We design, build, market and maintain web apps, mobile apps, SaaS products and custom software.",
   url:
     process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : "http://localhost:3000"),
+    (process.env.NODE_ENV === "production" ? "https://brandovert.com" : "http://localhost:3000"),
   contact: {
     phoneDisplay: "+91 98750 73267",
     phoneHref: "tel:+919875073267",
