@@ -4,9 +4,13 @@ import { notFound } from "next/navigation";
 import { ArrowRight, CircleCheck, Clock } from "lucide-react";
 import { getService, services } from "@/lib/content/services";
 import { caseStudies } from "@/lib/content/case-studies";
+import { faqsForService } from "@/lib/content/faqs";
+import { breadcrumbJsonLd, faqPageJsonLd, pageMetadata, serviceJsonLd } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/seo/breadcrumbs";
+import { JsonLd } from "@/components/seo/json-ld";
 import { CtaLink } from "@/components/site/cta";
 import { Section, SectionHeading } from "@/components/site/section";
-import { CaseStudyCard, CtaBand, PageHero, ServiceCard } from "@/components/site/blocks";
+import { CaseStudyCard, CtaBand, FaqList, PageHero, ServiceCard } from "@/components/site/blocks";
 import { TechIcon } from "@/components/site/tech-icon";
 
 function TechChip({ name }: { name: string }) {
@@ -28,7 +32,11 @@ export async function generateMetadata({ params }: PageProps<"/services/[slug]">
   const { slug } = await params;
   const service = getService(slug);
   if (!service) return {};
-  return { title: service.title, description: service.summary };
+  return pageMetadata({
+    title: `${service.title} in Patna`,
+    description: `${service.summary} Hire Brandovert in Verma Centre, Boring Road, Patna for fixed-price ${service.title.toLowerCase()}.`,
+    path: `/services/${service.slug}`,
+  });
 }
 
 export default async function ServicePage({ params }: PageProps<"/services/[slug]">) {
@@ -38,9 +46,17 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
 
   const relatedWork = caseStudies.filter((c) => c.services.includes(service.title)).slice(0, 2);
   const otherServices = services.filter((s) => s.slug !== service.slug).slice(0, 3);
+  const faqs = faqsForService(service);
+  const crumbs = [
+    { name: "Home", path: "/" },
+    { name: "Services", path: "/services" },
+    { name: service.title, path: `/services/${service.slug}` },
+  ];
 
   return (
     <>
+      <JsonLd data={[serviceJsonLd(service), breadcrumbJsonLd(crumbs), faqPageJsonLd(faqs)]} />
+      <Breadcrumbs items={crumbs} />
       <PageHero eyebrow="Services" title={service.title} description={service.description}>
         <CtaLink href={`/contact?service=${service.slug}`}>
           Get a quote for {service.title.toLowerCase()}
@@ -123,6 +139,28 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
           </div>
         </Section>
       )}
+
+      <Section tone="surface">
+        <SectionHeading
+          align="left"
+          title={`Frequently asked questions about ${service.title.toLowerCase()}`}
+          description="Straight answers for buyers comparing agencies in Patna, Bihar and beyond."
+        />
+        <div className="mx-auto mt-10 max-w-3xl">
+          <FaqList items={faqs} />
+        </div>
+        <p className="mt-8 text-center text-sm text-muted-foreground">
+          More answers on our{" "}
+          <Link href="/faq" className="font-semibold text-brand hover:underline">
+            FAQ page
+          </Link>
+          , or{" "}
+          <Link href="/contact" className="font-semibold text-brand hover:underline">
+            talk to the team
+          </Link>
+          .
+        </p>
+      </Section>
 
       <Section>
         <div className="flex items-end justify-between gap-6">

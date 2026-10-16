@@ -1,16 +1,24 @@
-import type { Metadata } from "next";
 import { ArrowUpRight, Clock, Mail, MapPin, Navigation, Phone } from "lucide-react";
 import { formattedAddress, site, whatsappHref } from "@/lib/site";
 import { services } from "@/lib/content/services";
+import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/seo/breadcrumbs";
+import { JsonLd } from "@/components/seo/json-ld";
 import { WhatsAppIcon } from "@/components/site/brand-icons";
 import { Section } from "@/components/site/section";
 import { PageHero } from "@/components/site/blocks";
 import { ContactForm } from "./contact-form";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Contact Us",
-  description: `Get in touch with ${site.name}. Call, WhatsApp, email or visit our office in ${site.contact.address.city}.`,
-};
+  description: `Contact ${site.name} in ${site.contact.address.line2}, ${site.contact.address.city}. Call ${site.contact.phoneDisplay}, WhatsApp, email ${site.contact.email}, or visit our office.`,
+  path: "/contact",
+});
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Contact Us", path: "/contact" },
+];
 
 const channels = [
   {
@@ -66,6 +74,8 @@ export default async function ContactPage({
 
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd(crumbs)} />
+      <Breadcrumbs items={crumbs} />
       <PageHero
         eyebrow="Contact us"
         title="Let's talk about your project"

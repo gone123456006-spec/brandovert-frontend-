@@ -1,0 +1,11 @@
+/* TEAM */
+Company: Brandovert Technologies Pvt. Ltd.
+Location: Verma Centre, Boring Road, Patna, India
+Contact: brandovertofc@gmail.com
+Site: https://brandovert.com
+
+/* SITE */
+Standards: HTML5, CSS3, Next.js
+Language: English (en-IN)
+Doctype: HTML5
+Components: React, Tailwind CSS

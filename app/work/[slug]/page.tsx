@@ -6,6 +6,10 @@ import { ArrowLeft, ArrowUpRight, CircleCheck } from "lucide-react";
 import { CtaAnchor } from "@/components/site/cta";
 import { caseStudies, getCaseStudy } from "@/lib/content/case-studies";
 import { testimonials } from "@/lib/content/company";
+import { services } from "@/lib/content/services";
+import { breadcrumbJsonLd, caseStudyJsonLd, pageMetadata } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/seo/breadcrumbs";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Section } from "@/components/site/section";
 import { CaseStudyCard, CtaBand, PageHero } from "@/components/site/blocks";
 
@@ -19,7 +23,13 @@ export async function generateMetadata({ params }: PageProps<"/work/[slug]">): P
   const { slug } = await params;
   const study = getCaseStudy(slug);
   if (!study) return {};
-  return { title: `${study.client} case study`, description: study.summary };
+  return pageMetadata({
+    title: `${study.client} case study`,
+    description: study.summary,
+    path: `/work/${study.slug}`,
+    type: "article",
+    image: study.screens[0],
+  });
 }
 
 export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]">) {
@@ -29,9 +39,18 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
 
   const testimonial = testimonials.find((t) => t.company.startsWith(study.client.split(" ")[0]));
   const more = caseStudies.filter((c) => c.slug !== study.slug).slice(0, 2);
+  const crumbs = [
+    { name: "Home", path: "/" },
+    { name: "Case Studies", path: "/work" },
+    { name: study.client, path: `/work/${study.slug}` },
+  ];
 
   return (
     <>
+      <JsonLd
+        data={[caseStudyJsonLd({ ...study, image: study.screens[0] }), breadcrumbJsonLd(crumbs)]}
+      />
+      <Breadcrumbs items={crumbs} />
       <PageHero eyebrow={`${study.client} · ${study.industry}`} title={study.title} description={study.summary}>
         <CtaAnchor href={study.link.href} target="_blank" rel="noopener noreferrer">
           {study.link.label}
@@ -122,9 +141,20 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
             <div>
               <h3 className="text-sm font-semibold tracking-wider text-muted-foreground uppercase">Services</h3>
               <ul className="mt-3 space-y-1.5 font-medium text-ink">
-                {study.services.map((s) => (
-                  <li key={s}>{s}</li>
-                ))}
+                {study.services.map((label) => {
+                  const match = services.find((s) => s.title === label);
+                  return (
+                    <li key={label}>
+                      {match ? (
+                        <Link href={`/services/${match.slug}`} className="text-brand hover:underline">
+                          {label}
+                        </Link>
+                      ) : (
+                        label
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
             {study.stack && (

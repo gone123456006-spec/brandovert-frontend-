@@ -1,35 +1,31 @@
-import type { Metadata } from "next";
 import { faqGroups } from "@/lib/content/faqs";
 import { site, whatsappHref } from "@/lib/site";
+import { breadcrumbJsonLd, faqPageJsonLd, pageMetadata } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/seo/breadcrumbs";
+import { JsonLd } from "@/components/seo/json-ld";
 import { CtaAnchor, CtaLink } from "@/components/site/cta";
 import { WhatsAppIcon } from "@/components/site/brand-icons";
 import { Section } from "@/components/site/section";
 import { FaqList, PageHero } from "@/components/site/blocks";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "FAQ",
-  description: `Answers to common questions about working with ${site.name}: pricing, timelines, ownership and support.`,
-};
+  description: `Answers to common questions about working with ${site.name}: pricing, timelines, ownership, support and how fixed-price projects work in Patna.`,
+  path: "/faq",
+});
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqGroups.flatMap((g) =>
-    g.items.map((f) => ({
-      "@type": "Question",
-      name: f.question,
-      acceptedAnswer: { "@type": "Answer", text: [f.answer, ...(f.points ?? [])].join(" ") },
-    }))
-  ),
-};
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "FAQ", path: "/faq" },
+];
 
 export default function FaqPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c") }}
+      <JsonLd
+        data={[faqPageJsonLd(faqGroups.flatMap((g) => g.items)), breadcrumbJsonLd(crumbs)]}
       />
+      <Breadcrumbs items={crumbs} />
       <PageHero
         eyebrow="FAQ"
         title="Frequently asked questions"

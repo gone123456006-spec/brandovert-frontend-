@@ -143,7 +143,7 @@ export function ServiceCardBody({ service }: { service: Service }) {
       {/* Illustrations have white backgrounds; multiply blends them into the card colour. */}
       <Image
         src={serviceIllustration(service.slug)}
-        alt=""
+        alt={`${service.title} by Brandovert`}
         width={640}
         height={640}
         sizes="200px"

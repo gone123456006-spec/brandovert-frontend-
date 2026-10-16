@@ -105,3 +105,72 @@ export const homeFaqs: Faq[] = [
   faqGroups[2].items[2],
   faqGroups[3].items[0],
 ];
+
+/** Per-service FAQs for featured snippets, voice search and AI answer engines. */
+const serviceFaqOverrides: Partial<Record<string, Faq[]>> = {
+  "web-development": [
+    {
+      question: "How much does a website cost in Patna?",
+      answer:
+        "At Brandovert, marketing websites typically start around ₹75,000. The final fixed quote depends on pages, integrations and content. You receive a written scope and price within 5 working days.",
+    },
+    {
+      question: "How long does it take to build a website?",
+      answer:
+        "Most websites take 4 to 10 weeks from kickoff to launch, with weekly demos of working pages so you can review progress early.",
+    },
+    {
+      question: "Do you build SEO-ready websites?",
+      answer:
+        "Yes. Every site ships with semantic HTML, fast Core Web Vitals, technical SEO basics, analytics setup and a structure that search engines and AI answer engines can crawl clearly.",
+    },
+  ],
+  "app-development": [
+    {
+      question: "How much does a mobile app cost?",
+      answer:
+        "Mobile apps with Brandovert typically start around ₹4,00,000. Scope, platforms (Android, iOS or both) and backend complexity determine the fixed quote.",
+    },
+    {
+      question: "Do you build Android, iOS or both?",
+      answer:
+        "We build native and cross-platform apps. Many clients start with Android or a shared codebase, then expand to iOS once product-market fit is clear.",
+    },
+  ],
+  seo: [
+    {
+      question: "What SEO services does Brandovert offer in Patna?",
+      answer:
+        "We cover technical SEO, on-page optimisation, content structure for featured snippets, local SEO for Patna and Bihar businesses, and measurement of rankings, traffic and leads.",
+    },
+    {
+      question: "How long until SEO results show?",
+      answer:
+        "Meaningful movement usually takes 3 to 6 months. We report monthly on rankings, traffic and leads so you can see progress, not just activity.",
+    },
+  ],
+};
+
+/** Builds clear Q&A for any service page — custom where we have them, otherwise derived from the service itself. */
+export function faqsForService(service: {
+  slug: string;
+  title: string;
+  timeline: string;
+  outcomes: string[];
+}): Faq[] {
+  if (serviceFaqOverrides[service.slug]) return serviceFaqOverrides[service.slug]!;
+  return [
+    {
+      question: `What does ${service.title} include at Brandovert?`,
+      answer: `Our ${service.title.toLowerCase()} engagements are fixed-scope and fixed-price. Typical outcomes include: ${service.outcomes.join("; ")}.`,
+    },
+    {
+      question: `How long does ${service.title.toLowerCase()} take?`,
+      answer: `A typical timeline is ${service.timeline}. You get a week-by-week plan in the written proposal before work starts.`,
+    },
+    {
+      question: `Can I hire Brandovert for ${service.title.toLowerCase()} in Patna?`,
+      answer: `Yes. We are based at Verma Centre, Boring Road, Patna, and deliver ${service.title.toLowerCase()} for clients across India, the UK and the UAE. Start with a free consultation on our contact page.`,
+    },
+  ];
+}

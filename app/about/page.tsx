@@ -1,17 +1,25 @@
-import type { Metadata } from "next";
 import { leadership, values } from "@/lib/content/company";
 import { site } from "@/lib/site";
+import { breadcrumbJsonLd, pageMetadata, personJsonLd } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/seo/breadcrumbs";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Carousel, CarouselItem } from "@/components/site/carousel";
 import { Highlight, Section, SectionHeading } from "@/components/site/section";
 import { CtaBand, PageHero, StatsRow, Testimonials, WhyChooseUs } from "@/components/site/blocks";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "About Us",
-  description: `Learn about ${site.name}, the team of engineers, designers and marketers behind the products we build.`,
-};
+  description: `Learn about ${site.name}, the Patna team of engineers, designers and marketers behind 150+ web, app and SaaS products.`,
+  path: "/about",
+});
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "About Us", path: "/about" },
+];
 
 const milestones = [
-  { year: "2018", text: "Founded in Bengaluru as a three-person web development studio." },
+  { year: "2018", text: "Founded in Patna as a three-person web development studio." },
   { year: "2020", text: "Added mobile app development and shipped our first 50 projects." },
   { year: "2022", text: "Launched marketing and social media services for existing clients." },
   { year: "2024", text: "Grew to 40+ people and started offering fractional CTO services." },
@@ -21,6 +29,8 @@ const milestones = [
 export default function AboutPage() {
   return (
     <>
+      <JsonLd data={[breadcrumbJsonLd(crumbs), ...personJsonLd(leadership)]} />
+      <Breadcrumbs items={crumbs} />
       <PageHero
         title="Introducing Brandovert"
         description={`${site.name} is a team of engineers, designers and marketers who help businesses turn ideas into products customers actually use.`}

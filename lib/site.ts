@@ -3,10 +3,26 @@ export const site = {
   legalName: "Brandovert Technologies Pvt. Ltd.",
   tagline: "Software, growth and support under one roof.",
   description:
-    "Brandovert is a technology partner for growing businesses. We design, build, market and maintain web apps, mobile apps, SaaS products and custom software.",
+    "Brandovert is a Patna technology partner for growing businesses. We design, build, market and maintain web apps, mobile apps, SaaS products and custom software across India and beyond.",
   url:
     process.env.NEXT_PUBLIC_SITE_URL ??
     (process.env.NODE_ENV === "production" ? "https://brandovert.com" : "http://localhost:3000"),
+  locale: "en_IN",
+  keywords: [
+    "web development company Patna",
+    "app development company Bihar",
+    "SaaS development India",
+    "custom software development",
+    "UI UX design agency",
+    "digital marketing company Boring Road Patna",
+    "SEO services Patna",
+    "Brandovert",
+  ],
+  /** Approximate office coordinates — Verma Centre, Boring Road, Patna. */
+  geo: {
+    latitude: 25.617,
+    longitude: 85.1376,
+  },
   contact: {
     phoneDisplay: "+91 98750 73267",
     phoneHref: "tel:+919875073267",
@@ -15,14 +31,14 @@ export const site = {
     email: "brandovertofc@gmail.com",
     hours: "Mon to Sat, 10:00 AM to 7:00 PM IST",
     address: {
-      line1: "3rd Floor, 20, 100 Feet Road",
-      line2: "Koramangala",
-      city: "Bengaluru",
-      region: "Karnataka",
-      postalCode: "560034",
+      line1: "Verma Centre",
+      line2: "Boring Road",
+      city: "Patna",
+      region: "Bihar",
+      postalCode: "800001",
       country: "India",
     },
-    mapQuery: "Koramangala, Bengaluru, Karnataka 560034",
+    mapQuery: "Verma Centre, Boring Road, Patna, Bihar, India",
   },
   social: {
     linkedin: "https://www.linkedin.com/company/brandovert",

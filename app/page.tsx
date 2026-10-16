@@ -4,9 +4,11 @@ import { caseStudies } from "@/lib/content/case-studies";
 import { ClientLogos } from "@/components/site/client-logos";
 import { HeroIllustration } from "@/components/site/hero-illustration";
 import { homeFaqs } from "@/lib/content/faqs";
+import { process as processSteps } from "@/lib/content/company";
+import { defaultTitle, faqPageJsonLd, howToJsonLd, pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
 import { CtaLink } from "@/components/site/cta";
 import { Carousel, CarouselItem } from "@/components/site/carousel";
-import { ServiceEnquiryButton } from "@/components/site/service-enquiry";
 import { Highlight, Section, SectionHeading } from "@/components/site/section";
 import {
   ComparisonTable,
@@ -14,12 +16,19 @@ import {
   FaqList,
   PortfolioCard,
   ProcessSteps,
-  ServiceCardBody,
-  serviceCardClass,
+  ServiceCard,
   StatsRow,
   Testimonials,
   WhyChooseUs,
 } from "@/components/site/blocks";
+
+export const metadata = pageMetadata({
+  title: defaultTitle,
+  absoluteTitle: true,
+  description:
+    "Brandovert is a Patna web, app and SaaS development company. Fixed-price builds, weekly demos, and you own the code — from Boring Road, Patna to clients across India, the UK and the UAE.",
+  path: "/",
+});
 
 const heroPoints = [
   "Fixed scope and fixed price",
@@ -30,6 +39,12 @@ const heroPoints = [
 export default function HomePage() {
   return (
     <>
+      <JsonLd
+        data={[
+          faqPageJsonLd(homeFaqs),
+          howToJsonLd(processSteps.map((s) => ({ title: s.title, body: s.body }))),
+        ]}
+      />
       <section className="relative isolate overflow-hidden bg-gradient-to-b from-white via-surface to-white">
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle,rgb(0_0_0/0.13)_1px,transparent_1.5px)] bg-[size:22px_22px] [mask-image:radial-gradient(ellipse_75%_70%_at_60%_45%,black_30%,transparent_80%)]" />
@@ -44,8 +59,9 @@ export default function HomePage() {
               </Highlight> of tech companies.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Brandovert designs, builds, markets and maintains software for growing businesses: web
-              and mobile apps, SaaS products and custom tools, delivered by one senior team.
+              Brandovert is a Boring Road, Patna technology partner. We design, build, market and
+              maintain software for growing businesses: web and mobile apps, SaaS products and custom
+              tools, delivered by one senior team.
             </p>
             <ul className="mt-7 space-y-2.5">
               {heroPoints.map((p) => (
@@ -94,12 +110,7 @@ export default function HomePage() {
           <Carousel label="Services">
             {services.map((s) => (
               <CarouselItem key={s.slug}>
-                <ServiceEnquiryButton
-                  service={{ slug: s.slug, title: s.title }}
-                  className={serviceCardClass}
-                >
-                  <ServiceCardBody service={s} />
-                </ServiceEnquiryButton>
+                <ServiceCard service={s} />
               </CarouselItem>
             ))}
           </Carousel>
